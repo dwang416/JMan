@@ -202,6 +202,17 @@ public class JManBoard {
             int initialColor = JManApp.rand(0, 2);
             jMan = new JMan(x, y, initialColor);
             board[x][y] = jMan;
+        } else if (t == Piece.BLOCK) {
+            board[x][y] = new Block(x, y);
+        } else if (t == Piece.WALKER) {
+            int initialColor = JManApp.rand(0, 2);
+            board[x][y] = new Walker(x, y, initialColor);
+        } else if (t == Piece.PILLAR) {
+            int initialColor = JManApp.rand(0, 2);
+            board[x][y] = new Pillar(x, y, initialColor);
+        } else {
+            // this code block shouldn't be reached
+            throw new RuntimeException("Unknown type is being placed!");
         }
     }
 }

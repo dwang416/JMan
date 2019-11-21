@@ -41,12 +41,42 @@ public class JMan extends Piece {
       *  Precondition: The board for the provided controller includes this
       *  piece at the position (x,y).    */
     public void act(JManBoard board) {
-        // STUB: Replace with actual functionality
+        int move = board.nextJManDirection();
+        int xx = x, yy = y;         // the potential new location after moving
+
+        if (move == 1) yy--;        // move up
+        else if (move == 2) yy++;   // move down
+        else if (move == 3) xx--;   // move left
+        else xx++;                  // move right
+
+        if (!board.isOnBoard(xx, yy)) return;
+        Piece p = board.pieceAt(xx, yy);
+        if (p == null) {
+            // simply move JMan to the empty place without capturing
+            board.move(x, y, xx, yy);
+        } else if (p.type == Piece.BLOCK) {
+            // cannot move into a block
+            return;
+        } else {
+            // check if JMan can capture and then move to Pillar or Walker
+            Color pColor = p.color;
+            if (canEat(pColor)) {
+                board.move(x, y, xx, yy);
+                setColor(pColor);
+            }
+        }
+
+        
     }
     
     /* Yields: "Piece p's color is the color J*Man can currently capture". */
+    /** A green J*Man can only capture red pieces
+        A red J*Man can only capture yellow pieces
+        A yellow J*Man can only capture green pieces */
     private boolean canEat(Color c) {
-        // STUB: Replace with actual functionality
-        return false;
+        if ((color == Color.green && c == Color.red) ||
+            (color == Color.red && c == Color.yellow) || 
+            (color == Color.yellow && c == Color.green)) return true;
+        else return false;
     }
 }
